@@ -2,10 +2,32 @@
 // #include <stdlib.h>
 // #include <string.h>
 #include "mr2d"
+#include "models.h"
 
 int main(int argc, char const *argv[])
 {
-	
+	mr2d::mesh m;
+	mr2d::display d(m);
+
+	d.display_mesh(0);
+	for(int i = 0; i < 10000; ++i) {
+		std::list<mr2d::vertex>::iterator it[3];
+		it[0] = m.add_vertex(0, (double)rand()/INT_MAX*10-5, (double)rand()/INT_MAX*10-5);
+		it[1] = m.add_vertex(0, (double)rand()/INT_MAX*10-5, (double)rand()/INT_MAX*10-5);
+		it[2] = m.add_vertex(0, (double)rand()/INT_MAX*10-5, (double)rand()/INT_MAX*10-5);
+		m.add_triangle(it[0], it[1], it[2]);
+		d.display_mesh(0);
+		if(rand()%10 < 9) m._triangles.pop_front();
+	}
+
+	// std::list<mr2d::vertex>::iterator it[6];
+
+	// it[3] = m.add_vertex(0, 0.5, 0);
+	// it[4] = m.add_vertex(0, 1.5, 0);
+	// it[5] = m.add_vertex(0, 1.5, 1);
+	// m.add_triangle(it[3], it[4], it[5]);
+	d.display_mesh(0);
+
 	return 0;
 }
 
