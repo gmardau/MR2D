@@ -1,10 +1,11 @@
-class display
+template <typename MeshType>
+class Display
 {
 	private:
-	typedef std::list<vertex>::iterator _Vertex;
-	typedef std::list<vertex>::reverse_iterator _RVertex;
-	typedef std::list<triangle>::iterator _Triangle;
-	typedef std::list<triangle>::reverse_iterator _RTriangle;
+	typedef std::list<Vertex>::iterator _Vertex;
+	typedef std::list<Vertex>::reverse_iterator _RVertex;
+	typedef std::list<Triangle>::iterator _Triangle;
+	typedef std::list<Triangle>::reverse_iterator _RTriangle;
 
 
 	/* === Variables === */
@@ -14,6 +15,8 @@ class display
 	SDL_Window *_window;
 	SDL_GLContext _context[2];
 	int _window_w, _window_h, _screen_w, _screen_h, _program;
+	char _title[200];
+	unsigned int _title_iteration, _title_vertices = 0, _title_triangles = 0;
 
 	/* Render thread */
 	bool _running = 1;
@@ -32,27 +35,27 @@ class display
 	int _mouse_x, _mouse_y;
 
 	/* Flags and objects data */
-	mesh &_mesh;
+	MeshType &_mesh;
 	unsigned int _vao, _vbo_vertices, _vbo_indices, _display_size = 0;
-	unsigned int _allocated_vertices = 0, _allocated_indices = 0, _size_vertices = 0, _size_indices = 0;
-	float *_vertices = nullptr; unsigned int *_indices = nullptr;
-	unsigned long int _last_vertex_id = 0;
-	float _allocation_factor = 1.5;
+	std::vector<float> _vertices;
+	std::vector<unsigned int> _indices;
+	unsigned int _last_vertex_id = 0;
 	/* === Variables === */
 
 
 	/* === Constructor / Destructor === */
 	public:
-	display (mesh &mesh_) : _mesh(mesh_)
+	Display (MeshType &mesh) : _mesh(mesh)
 	{
 		signal(SIGINT, exit);
 
 		/* Window */
-		Display *display = XOpenDisplay(NULL);
+		_XDisplay *display = XOpenDisplay(NULL);
 		Screen *screen = DefaultScreenOfDisplay(display);
 		_window_w = _screen_w = screen->width;
 		_window_h = _screen_h = screen->height;
 		XCloseDisplay(display);
+		_mouse_x = _window_w >> 1; _mouse_y = _window_h >> 1;
 
 		/* SDL */
 		SDL_Init(SDL_INIT_VIDEO);
@@ -107,7 +110,7 @@ class display
 		glLinkProgram(_program); glUseProgram(_program);
 		glUniform4f(glGetUniformLocation(_program, "object_colour"), 1, 1, 1, 1);
 		_projection_location = glGetUniformLocation(_program, "projection");
-		_cam_ratio = 1.35 / _window_w;
+		_cam_ratio = 1.5 / _window_w;
 		_update_projection();
 
 		/* Free */
@@ -124,7 +127,7 @@ class display
 
 		/* Create render thread */
 		_mutex_cond.lock();
-		_renderer = std::thread(&display::_render, this);
+		_renderer = std::thread(&Display::_render, this);
 		_cond_main.wait(_mutex_cond);
 		_mutex_cond.unlock();
 
@@ -134,10 +137,8 @@ class display
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vbo_indices);
 	}
 
-	~display ()
+	~Display ()
 	{
-		if(_allocated_vertices > 0) free(_vertices);
-		if(_allocated_indices > 0) free(_indices);
 		_running = 0;
 		_mutex_cond.lock();
 		_cond_renderer.notify_one();
@@ -178,18 +179,16 @@ class display
 	bool
 	_pre_process (bool &alloc_vertices, bool &alloc_indices)
 	{
-		if(_allocated_indices < _mesh._triangles.size() * 3) {
-			_allocated_indices = _mesh._triangles.size() * 3 *_allocation_factor;
-			_indices = (unsigned int *) realloc(_indices, _allocated_indices * sizeof(unsigned int));
+		if(_indices.capacity() < _mesh._triangles.size() * 3) {
+			_indices.reserve(_mesh._triangles.size() * 6);
 			alloc_indices = true;
 		} else alloc_indices = false;
 
 		// Maybe reallocate and not redo, instead of not reallocate and redo (if usage is above 50% perhaps)
 		unsigned int new_vertices = _mesh._vertices.rbegin()->_id - _last_vertex_id + 1;
-		if(_allocated_vertices < _size_vertices + (new_vertices << 1)) {
-			if(_allocated_vertices < _mesh._vertices.size() << 1) {
-				_allocated_vertices = (_mesh._vertices.size() << 1) * _allocation_factor;
-				_vertices = (float *) realloc(_vertices, _allocated_vertices * sizeof(float));
+		if(1 || _vertices.capacity() < _vertices.size() + (new_vertices << 1)) {
+			if(1 || _vertices.capacity() < _mesh._vertices.size() << 1) {
+				_vertices.reserve(_mesh._vertices.size() << 2);
 				alloc_vertices = true; return true;
 			} else { alloc_vertices = false; return true; }
 		} else { alloc_vertices = false; return false; }
@@ -212,18 +211,20 @@ class display
 	}
 	/* === Process vertices - redo === */
 
+
 	/* === Process vertices - append new ones === */
 	private:
 	void
 	_process_vertices_append (_RVertex it)
 	{
-		for(unsigned int i = _size_vertices >> 1; it->_id >= _last_vertex_id; ++i, ++it) {
+		for(unsigned int i = _vertices.size() >> 1; it->_id >= _last_vertex_id; ++i, ++it) {
 			it->_display_id = i;
-			_vertices[_size_vertices] = it->_x[0]; ++_size_vertices;
-			_vertices[_size_vertices] = it->_x[1]; ++_size_vertices;
+			_vertices.push_back(it->_x[0]);
+			_vertices.push_back(it->_x[1]);
 		}
 	}
 	/* === Process vertices - append new ones === */
+
 
 	/* === Process triangles - indices === */
 	private:
@@ -243,15 +244,10 @@ class display
 	/* === Define mesh display data === */
 	public:
 	void
-	display_mesh (bool mode)
+	display (bool mode = 0, unsigned int iteration = 0)
 	{
 		/* In case the current thread is not the one that performed the initialisation */
 		// SDL_GL_MakeCurrent(_window, _context[0]);
-
-		/* Set title */
-		char title[50];
-		sprintf(title, "Vertices: %lu  -  Triangles: %lu", _mesh._vertices.size(), _mesh._triangles.size()); 
-		SDL_SetWindowTitle(_window, title);
 
 		/* If there are no triangles to display - notify the renderer and exit */
 		if(_mesh._triangles.size() == 0) {
@@ -263,13 +259,11 @@ class display
 		unsigned int half;
 		std::thread worker;
 
-		/* USE ARRAYS INSTEAD OF VECTORS */
-
 		/* Process vertices - redo */
 		if(_pre_process(alloc_vertices, alloc_indices)) {
-			_size_vertices = _mesh._vertices.size() << 1;
+			_vertices.resize(_mesh._vertices.size() << 1);
 			half = _mesh._vertices.size() >> 1 << 1;
-			worker = std::thread(&display::_process_vertices_redo<_Vertex>, this, _mesh._vertices.begin(), 0, half);
+			worker = std::thread(&Display::_process_vertices_redo<_Vertex>, this, _mesh._vertices.begin(), 0, half);
 			_process_vertices_redo(_mesh._vertices.rbegin(), half, _mesh._vertices.size() << 1);
 			worker.join();
 		}
@@ -278,28 +272,35 @@ class display
 		_last_vertex_id = _mesh._vertices.rbegin()->_id + 1;
 
 		/* Process indices */
-		_size_indices = _mesh._triangles.size() * 3;
+		_indices.resize(_mesh._triangles.size() * 3);
 		half = (_mesh._triangles.size() >> 1) * 3;
-		worker = std::thread(&display::_process_indices<_Triangle>, this, _mesh._triangles.begin(), 0, half);
+		worker = std::thread(&Display::_process_indices<_Triangle>, this, _mesh._triangles.begin(), 0, half);
 		_process_indices(_mesh._triangles.rbegin(), half, _mesh._triangles.size() * 3);
 		worker.join();
 
-		/* - Update buffers - */
+		/* - Update display info - */
 		_mutex_data.lock();
 
-		_display_size = _size_indices;
+		/* Title information */
+		_title_iteration = iteration;
+		_title_vertices = _mesh._vertices.size();
+		_title_triangles = _mesh._triangles.size();
+		_update_title();
+
+		_display_size = _indices.size();
+
 		/* Reallocate space for buffers */
 		if(alloc_vertices)
-			glBufferData(GL_ARRAY_BUFFER, _allocated_vertices * sizeof(float), NULL, GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, _vertices.capacity() * sizeof(float), NULL, GL_DYNAMIC_DRAW);
 		if(alloc_indices)
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _allocated_indices * sizeof(unsigned int), NULL, GL_DYNAMIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.capacity() * sizeof(unsigned int), NULL, GL_DYNAMIC_DRAW);
 		/* Update buffer data */
-		glBufferSubData(GL_ARRAY_BUFFER, 0, _size_vertices * sizeof(float), &_vertices[0]);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, _size_indices * sizeof(unsigned int), &_indices[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, _vertices.size() * sizeof(float), &_vertices[0]);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, _indices.size() * sizeof(unsigned int), &_indices[0]);
 		glFlush();
 
 		_mutex_data.unlock();
-		/* - Update buffers - */
+		/* - Update display info - */
 
 		/* Notify renderer */
 		_notify_renderer(mode);
@@ -391,6 +392,19 @@ class display
 		SDL_GL_SwapWindow(_window);
 	}
 	/* === Drawing function === */
+
+	/* === Title === */
+	private:
+	void
+	_update_title ()
+	{
+		sprintf(_title, "Mesh Remodelling for 2 Dimensions   \u2219   Iteration %u    \u2219"
+			"    Vertices: %u  Triangles: %u    \u2219    (%.10f , %.10f)",
+		    _title_iteration, _title_vertices, _title_triangles,
+		    _cam_x+((_mouse_x-(_window_w >> 1))*_cam_ratio), _cam_y-((_mouse_y-(_window_h >> 1))*_cam_ratio)); 
+		SDL_SetWindowTitle(_window, _title);
+	}
+	/* === Title === */
 	/* ############################# Rendering ############################# */
 	/* ##################################################################### */
 
@@ -405,7 +419,7 @@ class display
 		if(event.key.state == SDL_PRESSED)
 			switch(event.key.keysym.sym) {
 				/* R key - reset scene */
-				case SDLK_r: _cam_x = 0.5; _cam_y = 0; _cam_ratio = 1.35/_window_w;
+				case SDLK_r: _cam_x = 0.5; _cam_y = 0; _cam_ratio = 1.5/_window_w;
 				             _mutex_data.lock(); _update_projection(); _mutex_data.unlock(); break;
 				/* Space key - notify main thread */
 				case SDLK_SPACE: _mutex_cond.lock(); _cond_main.notify_one(); _mutex_cond.unlock(); break;
@@ -421,6 +435,7 @@ class display
 	{
 		SDL_MouseMotionEvent *motion = &event.motion;
 		SDL_MouseButtonEvent *button = &event.button;
+		SDL_MouseWheelEvent *wheel = &event.wheel;
 
 		switch(event.type) {
 			case SDL_MOUSEMOTION:
@@ -430,7 +445,7 @@ class display
 					_cam_x -= motion->xrel * _cam_ratio;
 					_cam_y += motion->yrel * _cam_ratio;
 				}
-				_mutex_data.lock(); _update_projection(); _mutex_data.unlock();
+				_mutex_data.lock(); _update_projection(); _update_title(); _mutex_data.unlock();
 				break;
 
 			case SDL_MOUSEBUTTONUP:
@@ -441,16 +456,15 @@ class display
 			case SDL_MOUSEBUTTONDOWN:
 				     if(button->button == SDL_BUTTON_LEFT)   _left_button = 1;
 				else if(button->button == SDL_BUTTON_RIGHT) _right_button = 1;
-				_mouse_x = button->x; _mouse_y = button->y;
 				break;
 
 			/* Zoom - adjust distance from camera to object */
 			case SDL_MOUSEWHEEL:
-				if(button->x == 1) {
+				if(wheel->y == 1) {
 					_cam_x += (_mouse_x - (_window_w >> 1)) * _cam_ratio * (1-(1/_cam_zoom));
 					_cam_y -= (_mouse_y - (_window_h >> 1)) * _cam_ratio * (1-(1/_cam_zoom));
 			    	_cam_ratio /= _cam_zoom;
-			    } else if(button->x == -1) {
+			    } else if(wheel->y == -1) {
 					_cam_x -= (_mouse_x - (_window_w >> 1)) * _cam_ratio * (_cam_zoom-1);
 					_cam_y += (_mouse_y - (_window_h >> 1)) * _cam_ratio * (_cam_zoom-1);
 			    	_cam_ratio *= _cam_zoom;

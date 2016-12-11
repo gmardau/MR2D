@@ -1,78 +1,157 @@
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include "mr2d"
 #include "models.h"
 
-int main(int argc, char const *argv[])
+#define NA 8
+
+/* Forward function declarations */
+template <typename T> void execute (char const *[], unsigned int, unsigned int, bool, bool, bool, bool, T);
+void help_menu ();
+void process_command (int, char const *[], unsigned int &, unsigned int &, bool &, bool &, bool &, bool &,
+    unsigned int &, unsigned int &, double &, double &, double &, double &, double &, double &);
+/* Forward function declarations */
+
+
+/* === Main === */
+int
+main (int argc, char const *argv[])
 {
-	mr2d::mesh m;
-	mr2d::display d(m);
+	bool v = false, t = false, m = false, d = false;
+	unsigned int i = 0, a = 0, nf = 6, nm = 300;
+	double L = 30*M_PI/180, R = 1, G = 6, B = 30*M_PI/180, H = sqrt(2)/2, D = 1;
 
-	d.display_mesh(0);
-	for(int i = 0; i < 10000; ++i) {
-		std::list<mr2d::vertex>::iterator it[3];
-		it[0] = m.add_vertex(0, (double)rand()/INT_MAX*10-5, (double)rand()/INT_MAX*10-5);
-		it[1] = m.add_vertex(0, (double)rand()/INT_MAX*10-5, (double)rand()/INT_MAX*10-5);
-		it[2] = m.add_vertex(0, (double)rand()/INT_MAX*10-5, (double)rand()/INT_MAX*10-5);
-		m.add_triangle(it[0], it[1], it[2]);
-		d.display_mesh(0);
-		if(rand()%10 < 9) m._triangles.pop_front();
-	}
+	process_command(argc, argv, i, a, v, t, m, d, nf, nm, L, R, G, B, H, D);
 
-	// std::list<mr2d::vertex>::iterator it[6];
-
-	// it[3] = m.add_vertex(0, 0.5, 0);
-	// it[4] = m.add_vertex(0, 1.5, 0);
-	// it[5] = m.add_vertex(0, 1.5, 1);
-	// m.add_triangle(it[3], it[4], it[5]);
-	d.display_mesh(0);
+	if(v) { if(t) { if(m) { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,1,1,1>(nf, nm, L, R, G, B, H, D));
+	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,1,1,0>(nf, nm, L, R, G, B, H, D)); }
+	                else  { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,1,0,1>(nf, nm, L, R, G, B, H, D));
+	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,1,0,0>(nf, nm, L, R, G, B, H, D)); } }
+	        else  { if(m) { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,0,1,1>(nf, nm, L, R, G, B, H, D));
+	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,0,1,0>(nf, nm, L, R, G, B, H, D)); }
+	                else  { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,0,0,1>(nf, nm, L, R, G, B, H, D));
+	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,0,0,0>(nf, nm, L, R, G, B, H, D)); } } }
+	else  { if(t) { if(m) { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,1,1,1>(nf, nm, L, R, G, B, H, D));
+	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,1,1,0>(nf, nm, L, R, G, B, H, D)); }
+	                else  { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,1,0,1>(nf, nm, L, R, G, B, H, D));
+	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,1,0,0>(nf, nm, L, R, G, B, H, D)); } }
+	        else  { if(m) { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,0,1,1>(nf, nm, L, R, G, B, H, D));
+	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,0,1,0>(nf, nm, L, R, G, B, H, D)); }
+	                else  { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,0,0,1>(nf, nm, L, R, G, B, H, D));
+	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,0,0,0>(nf, nm, L, R, G, B, H, D)); } } }
 
 	return 0;
 }
+/* === Main === */
 
-// /* === Display help menu === */
-// void display_help()
-// {
-// 	printf("Usage: ./main [OPTIONS]\n\n");
-// 	printf("Options:\n");
-// 	printf("  -h      display this help and exit\n");
-// 	printf("  -i      input file\n");
-// 	printf("  -m      method mode\n");
-// 	printf("  -d      activate display\n");
-// 	printf("  -t      collect execution times (-T writes to file)\n");
-// 	printf("  -s      collect statistics (-S writes to file)\n");
-// 	printf("  -Mfn    no. of farfield vertices in initial discretisation\n");
-// 	printf("  -Mmn    no. of wing vertices in initial discretisation\n");
-// 	printf("  -MG     gradation factor\n");
-// 	printf("  -MB     minimum angle bound\n");
-// 	printf("  -MH     length scale bound\n");
-// 	printf("  -MT     Shewchuk's lenses angle\n");
-// 	printf("  -MD     removing distance factor\n");
 
-// 	exit(0);
-// }
+/* === Program execution === */
+template <typename T>
+void
+execute (char const *argv[], unsigned int i, unsigned int a, bool v, bool t, bool m, bool d, T example)
+{
+	farfield_circle farfield = farfield_circle(0.5, 0, 25);
+	FILE *file =  i ? fopen(argv[i], "r") : fopen("input/rae2822/0.05/1", "r");
+	char status[3][100] = {{"\0"}, {"\0"}, {"\0"}};
+	unsigned int j, k, l, n, time_left;
+	double A[2][NA], avg_time;
 
-// /* === Process command line arguments === */
-// void process_command(int argc, char const *argv[], int &f, int &m, bool &_d, int &_t, int &_s,
-// 	int &fn, int &mn, double &G, double &B, double &H, double &T, double &D)
-// {
-// 	int i;
-// 	for(i = 0; i < argc; i++) {
-// 		     if(!strcmp(argv[i], "-h"))   display_help();
-// 		else if(!strcmp(argv[i], "-i"))   f  = ++i;
-// 		else if(!strcmp(argv[i], "-m"))   m  = atoi(argv[++i]);
-// 		else if(!strcmp(argv[i], "-d"))   _d = 1;
-// 		else if(!strcmp(argv[i], "-t"))   _t = 1;
-// 		else if(!strcmp(argv[i], "-T"))   _t = 2;
-// 		else if(!strcmp(argv[i], "-s"))   _s = 1;
-// 		else if(!strcmp(argv[i], "-S"))   _s = 2;
-// 		else if(!strcmp(argv[i], "-Mfn")) fn = atoi(argv[++i]);
-// 		else if(!strcmp(argv[i], "-Mmn")) mn = atoi(argv[++i]);
-// 		else if(!strcmp(argv[i], "-MG"))  G  = atof(argv[++i]);
-// 		else if(!strcmp(argv[i], "-MB"))  B  = atof(argv[++i]);
-// 		else if(!strcmp(argv[i], "-MH"))  H  = atof(argv[++i]);
-// 		else if(!strcmp(argv[i], "-MT"))  T  = atof(argv[++i]);
-// 		else if(!strcmp(argv[i], "-MD"))  D  = atof(argv[++i]); 
-// 	}
-// }
+	/* Iterations */
+	fscanf(file, "%u", &n);
+	for(j = 0; j < n; ++j) {
+
+		/* Print status */
+		sprintf(status[0], "[Iteration: %d/%d]", j+1, n);
+		printf("\r%*c\r%s%s%s", 200, ' ', status[0], status[1], status[2]); fflush(stdout);
+
+		/* Create model */
+		for(k = 0; k < 2; ++k) for(l = 0; l < NA; ++l) fscanf(file, "%lf", &A[k][l]);
+		model_cst_naca<NA> model = model_cst_naca<NA>(A);
+
+		/* Call method */
+		if(!j) example.generation(farfield, model);
+		else {
+			switch(a) {
+				case 0: example.generation(farfield, model); break;
+				case 1: example.template remodelling<0>(model); break;
+				case 2: example.template remodelling<1>(model); break;
+			}
+		}
+
+		/* Display mesh */
+		if(v) example.template display<true>(true);
+		/* Prepare status */
+		if(t) {
+			avg_time = example.template get_avg_time<true>(); time_left = (n-1-j) * avg_time + 0.5;
+			sprintf(status[1], "  \u2219  [Avg. time: %.2lf ms] [Estimated time left: %dm %ds]",
+			    avg_time*1000, time_left/60, time_left%60); }
+		if(m)
+			sprintf(status[2], "  \u2219  [Avg. preservation: %.2lf%%]", example.template get_avg_preservation<true>());
+		/* Write diff to output file */
+		if(d) example.template export_diff<true>("diff");
+	}
+	fclose(file);
+
+	/* Write times and metrics to output file */
+	if(t) example.template export_timers <true>("times");
+	if(m) example.template export_metrics<true>("metrics");
+	/* Print status */
+	printf("\r%*c\r%s%s%s\n", 200, ' ', status[0], status[1], status[2]);
+	/* Display mesh */
+	if(v) example.template display<true>(false);
+}
+/* === Program execution === */
+
+
+/* === Help menu === */
+void
+help_menu ()
+{
+	printf("Usage: ./main [OPTIONS]\n\n");
+	printf("Options:\n");
+	printf("  -h        display this and exit\n");
+	printf("  -i []     path to input file; (default: \"./input/rae2822/0.05/1\")\n");
+	printf("  -a []     algorithm '0-2'; (default: 0)\n");
+	printf("  -v        activate display (visualiser)\n");
+	printf("  -t        activate measurement of execution times\n");
+	printf("  -m        activate collection of methods metrics\n");
+	printf("  -d        activate generation of diff information\n");
+	printf("  -nf []    no. of farfield vertices in discretisation; (default: 6)\n");
+	printf("  -nm []    no. of model vertices in discretisation; (default: 300)\n");
+	printf("  -L []     Shewchuk's lenses angle in degrees; (default: 30)\n");
+	printf("  -R []     resolution factor; (default: 1)\n");
+	printf("  -G []     gradation factor; (default: 6)\n");
+	printf("  -B []     minimum angle bound in degrees: (default: 30)\n");
+	printf("  -H []     length scale bound; (default: sqrt(2)/2)\n");
+	printf("  -D []     remodelling removal distance; (default: 1)\n");
+
+	exit(0);
+}
+/* === Help menu === */
+
+
+/* === Process command line arguments === */
+void
+process_command (int argc, char const *argv[], unsigned int &i, unsigned int &a, bool &v, bool &t, bool &m, bool &d,
+    unsigned int &nf, unsigned int &nm, double &L, double &R, double &G, double &B, double &H, double &D)
+{
+	for(int j = 1; j < argc; ++j)
+		     if(!strcmp(argv[j], "-h"))  help_menu();
+		else if(!strcmp(argv[j], "-i"))  i  = ++j;
+		else if(!strcmp(argv[j], "-a"))  a  = atoi(argv[++j]);
+		else if(!strcmp(argv[j], "-v"))  v  = true;
+		else if(!strcmp(argv[j], "-t"))  t  = true;
+		else if(!strcmp(argv[j], "-m"))  m  = true;
+		else if(!strcmp(argv[j], "-d"))  d  = true;
+		else if(!strcmp(argv[j], "-nf")) nf = atoi(argv[++j]);
+		else if(!strcmp(argv[j], "-nm")) nm = atoi(argv[++j]);
+		else if(!strcmp(argv[j], "-L"))  L  = atof(argv[++j])*M_PI/180;
+		else if(!strcmp(argv[j], "-R"))  R  = atof(argv[++j]);
+		else if(!strcmp(argv[j], "-G"))  G  = atof(argv[++j]);
+		else if(!strcmp(argv[j], "-B"))  B  = atof(argv[++j])*M_PI/180;
+		else if(!strcmp(argv[j], "-H"))  H  = atof(argv[++j]);
+		else if(!strcmp(argv[j], "-D"))  D  = atof(argv[++j]);
+}
+/* === Process command line arguments === */
