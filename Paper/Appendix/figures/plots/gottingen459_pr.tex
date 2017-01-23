@@ -1,0 +1,154 @@
+\begin{figure}[!h]
+\begin{center}
+\begin{tikzpicture}
+\begin{scope}[shift={(0.0\linewidth,0)}]
+\begin{axis}[
+ width=0.34\linewidth,height=0.23\linewidth,
+ title=\normalsize\mbox{$\sigma=0.01$},
+ xmode=log,enlarge x limits=0.025,
+ ylabel=Preservation (\%),
+ axis y line*=left,
+ ymin=88.1171833333,ymax=97.3373908333,
+ tick align=outside,
+ x axis line style = ultra thick,y axis line style={white},
+ xtick={2000,10000,50000},xticklabels={2000,10000,50000},
+ minor xtick={18000,26000,34000,42000,58000,66000}, every y tick/.style={white},ymajorgrids,grid style={gray!30,thick}]
+\addplot[very thick,mark=none,smooth,color=red!70] table[] {
+	1036.16033333 89.9523333333
+	1926.05033333 88.5353333333
+	4681.20233333 90.8853333333
+	9930.996 93.399
+	17403.444 94.8616666667
+	53726.3493333 96.885
+};
+\addplot[very thick,mark=none,smooth,color=orange!70] table[] {
+	1036.16033333 89.9523333333
+	1926.05033333 88.5353333333
+	4680.99133333 90.8813333333
+	9936.874 93.3996666667
+	17410.171 94.863
+	53781.8253333 96.8983333333
+};
+\addplot[very thick,mark=none,smooth,color=green!60!black!70] table[] {
+	1036.16033333 89.9523333333
+	1926.50133333 88.536
+	4686.797 90.912
+	9985.02666667 93.4346666667
+	17498.657 94.8743333333
+	54022.9776667 96.884
+};
+\addplot[very thick,mark=none,smooth,color=blue!60!] table[] {
+	1036.16033333 89.9523333333
+	1917.234 88.5486666667
+	4693.193 90.976
+	9995.812 93.474
+	17515.7216667 94.892
+	54124.1396667 96.8606666667
+};
+!\end{axis}
+\end{scope}
+\begin{scope}[shift={(0.28\linewidth,0)}]
+\begin{axis}[
+ width=0.34\linewidth,height=0.23\linewidth,
+ title=\normalsize\mbox{$\sigma=0.05$},
+ xmode=log,enlarge x limits=0.025,
+ xlabel=Number of elements \footnotesize(logarithmic scale),x label style={at={(axis description cs:0.5,-0.05)},anchor=north},
+ yticklabels={},
+ legend style={at={(0.55,1.45)},legend style={text width=4em},legend style={draw=none},anchor=north,legend columns=-1},
+ axis y line*=left,
+ ymin=88.1171833333,ymax=97.3373908333,
+ tick align=outside,
+ x axis line style = ultra thick,y axis line style={white},
+ xtick={2000,10000,50000},xticklabels={2000,10000,50000},
+ minor xtick={18000,26000,34000,42000,58000,66000}, every y tick/.style={white},ymajorgrids,grid style={gray!30,thick}]
+\addlegendimage{line width=3pt,mark=none,red!70}
+\addlegendentry{$D=0.5$}
+\addlegendimage{line width=3pt,mark=none,orange!70}
+\addlegendentry{$D=1$}
+\addlegendimage{line width=3pt,mark=none,green!60!black!70}
+\addlegendentry{$D=2$}
+\addlegendimage{line width=3pt,mark=none,blue!60!}
+\addlegendentry{$D=4$}
+\addplot[very thick,mark=none,smooth,color=red!70] table[] {
+	1163.49166667 90.8273333333
+	2177.14966667 89.939
+	4885.092 91.0303333333
+	10297.0083333 93.3843333333
+	17952.9826667 94.7843333333
+	55333.2983333 96.7773333333
+};
+\addplot[very thick,mark=none,smooth,color=orange!70] table[] {
+	1163.74866667 90.8273333333
+	2177.909 89.9183333333
+	4930.84733333 91.0886666667
+	10320.457 93.416
+	18010.387 94.7963333333
+	55424.09 96.7586666667
+};
+\addplot[very thick,mark=none,smooth,color=green!60!black!70] table[] {
+	1172.79533333 90.9116666667
+	2194.68166667 90.0166666667
+	5002.62133333 91.1726666667
+	10387.2886667 93.3883333333
+	18071.808 94.7496666667
+	55454.5933333 96.676
+};
+\addplot[very thick,mark=none,smooth,color=blue!60!] table[] {
+	1184.77533333 91.1646666667
+	2197.44466667 90.158
+	4945.073 91.1046666667
+	10276.6613333 93.305
+	17925.9466667 94.6233333333
+	55178.0426667 96.4986666667
+};
+!\end{axis}
+\end{scope}
+\begin{scope}[shift={(0.56\linewidth,0)}]
+\begin{axis}[
+ width=0.34\linewidth,height=0.23\linewidth,
+ title=\normalsize\mbox{$\sigma=0.25$},
+ xmode=log,enlarge x limits=0.025,
+ axis y line*=right,
+ ymin=88.1171833333,ymax=97.3373908333,
+ tick align=outside,
+ x axis line style = ultra thick,y axis line style={white},
+ xtick={2000,10000,50000},xticklabels={2000,10000,50000},
+ minor xtick={18000,26000,34000,42000,58000,66000}, every y tick/.style={white},ymajorgrids,grid style={gray!30,thick}]
+\addplot[very thick,mark=none,smooth,color=red!70] table[] {
+	1556.41833333 92.5956666667
+	2657.71066667 91.3543333333
+	5945.90766667 92.0966666667
+	12147.856 93.8533333333
+	21002.088 94.9846666667
+	64168.1893333 96.6466666667
+};
+\addplot[very thick,mark=none,smooth,color=orange!70] table[] {
+	1564.24866667 92.594
+	2666.779 91.3296666667
+	5704.51666667 91.6983333333
+	11594.5613333 93.4843333333
+	20113.86 94.6456666667
+	61973.142 96.349
+};
+\addplot[very thick,mark=none,smooth,color=green!60!black!70] table[] {
+	1623.46766667 92.8856666667
+	2673.40233333 91.2983333333
+	5489.90866667 91.1463333333
+	11039.2793333 92.896
+	19017.0963333 94.0743333333
+	58137.1513333 95.827
+};
+\addplot[very thick,mark=none,smooth,color=blue!60!] table[] {
+	1656.86533333 93.0056666667
+	2657.24066667 91.0693333333
+	5226.841 90.358
+	10537.8956667 92.072
+	18229.81 93.2213333333
+	55998.5563333 94.9526666667
+};
+!\end{axis}
+\end{scope}
+\end{tikzpicture}
+\end{center}
+\caption{Element preservation results using mesh remodelling - Gottingen 459 airfoil}\centering\sffamily\footnotesize
+Average of thirty optimisation scenarios\end{figure}

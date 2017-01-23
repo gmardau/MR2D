@@ -1,0 +1,125 @@
+\documentclass[11pt, twoside]{article}
+
+\usepackage{style}
+
+\begin{document}
+
+\appendix
+\renewcommand*{\thefigure}{A\arabic{figure}}
+\renewcommand*{\thetable}{A\arabic{table}}
+
+\section{Appendix}
+
+\subsection{Airfoils}
+\begin{center}
+\input{figures/airfoils/naca0012}
+\input{figures/airfoils/gottingen459}
+\vspace{0.75cm}\\
+\input{figures/airfoils/naca2412}
+\input{figures/airfoils/clarky}
+\vspace{0.75cm}\\
+\input{figures/airfoils/boeing737}
+\input{figures/airfoils/rae2822}
+\vspace{0.75cm}\\
+\input{figures/airfoils/naca63206}
+\input{figures/airfoils/eppler376}
+\vspace{0.75cm}\\
+\input{figures/airfoils/eppler545}
+\input{figures/airfoils/gottingen702}
+\end{center}
+
+\subsection{Legend}
+\begin{minipage}{0.49\linewidth}
+	\begin{description}[labelsep=2em,labelwidth=0.5cm,labelindent=0.5cm, itemsep=0cm]
+			\item[$\boldsymbol{\sigma}$] CMA-ES initial standard deviation factor
+			\item[$\boldsymbol{I}$] Cardinality of the initial discretisation
+			\item[$\boldsymbol{G}$] Length scale gradation factor
+			\item[$\boldsymbol{D}$] Mesh remodelling removal distance factor
+	\end{description}
+\end{minipage}
+\begin{minipage}{0.49\linewidth}
+	\begin{description}[labelsep=2em,labelwidth=1.75cm,labelindent=0.5cm, itemsep=0cm]
+		\item[\# Tri.] Number of elements in the mesh
+		\item[Time] Execution time
+		\item[Preserv.] Element preservation
+		\item[+ Tri.] Element surplus
+		\item[Sp.-up] Speed-up
+	\end{description}
+\end{minipage}
+
+\newpage
+\subsection{Results}
+\subsubsection{Gottingen 459}
+\vspace*{\fill} \input{tables/gottingen459_0.01} \vspace*{\fill}
+\input{tables/gottingen459_0.05}
+\input{tables/gottingen459_0.25} \newpage
+\input{figures/plots/gottingen459_pr}
+\input{figures/plots/gottingen459_es}
+\input{figures/plots/gottingen459_su}
+\pagebreak
+\subsubsection{NACA 2412}
+\vspace*{\fill} \input{tables/naca2412_0.01} \vspace*{\fill}
+\input{tables/naca2412_0.05}
+\input{tables/naca2412_0.25} \newpage
+\input{figures/plots/naca2412_pr}
+\input{figures/plots/naca2412_es}
+\input{figures/plots/naca2412_su}
+\pagebreak
+\subsubsection{Clark-Y}
+\vspace*{\fill} \input{tables/clarky_0.01} \vspace*{\fill}
+\input{tables/clarky_0.05}
+\input{tables/clarky_0.25} \newpage
+\input{figures/plots/clarky_pr}
+\input{figures/plots/clarky_es}
+\input{figures/plots/clarky_su}
+\pagebreak
+\subsubsection{Boeing 737}
+\vspace*{\fill} \input{tables/boeing737_0.01} \vspace*{\fill}
+\input{tables/boeing737_0.05}
+\input{tables/boeing737_0.25} \newpage
+\input{figures/plots/boeing737_pr}
+\input{figures/plots/boeing737_es}
+\input{figures/plots/boeing737_su}
+\pagebreak
+\subsubsection{RAE 2822}
+\vspace*{\fill} \input{tables/rae2822_0.01} \vspace*{\fill}
+\input{tables/rae2822_0.05}
+\input{tables/rae2822_0.25} \newpage
+\input{figures/plots/rae2822_pr}
+\input{figures/plots/rae2822_es}
+\input{figures/plots/rae2822_su}
+\pagebreak
+\subsubsection{NACA 63206}
+\vspace*{\fill} \input{tables/naca63206_0.01} \vspace*{\fill}
+\input{tables/naca63206_0.05}
+\input{tables/naca63206_0.25} \newpage
+\input{figures/plots/naca63206_pr}
+\input{figures/plots/naca63206_es}
+\input{figures/plots/naca63206_su}
+\pagebreak
+\subsubsection{Eppler 376}
+\vspace*{\fill} \input{tables/eppler376_0.01} \vspace*{\fill}
+\input{tables/eppler376_0.05}
+\input{tables/eppler376_0.25} \newpage
+\input{figures/plots/eppler376_pr}
+\input{figures/plots/eppler376_es}
+\input{figures/plots/eppler376_su}
+\pagebreak
+\subsubsection{Eppler 545}
+\vspace*{\fill} \input{tables/eppler545_0.01} \vspace*{\fill}
+\input{tables/eppler545_0.05}
+\input{tables/eppler545_0.25} \newpage
+\input{figures/plots/eppler545_pr}
+\input{figures/plots/eppler545_es}
+\input{figures/plots/eppler545_su}
+\pagebreak
+\subsubsection{Gottingen 702}
+\vspace*{\fill} \input{tables/gottingen702_0.01} \vspace*{\fill}
+\input{tables/gottingen702_0.05}
+\input{tables/gottingen702_0.25} \newpage
+\input{figures/plots/gottingen702_pr}
+\input{figures/plots/gottingen702_es}
+\input{figures/plots/gottingen702_su}
+\pagebreak
+
+\end{document}

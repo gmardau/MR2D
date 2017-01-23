@@ -153,15 +153,9 @@ _is_poor (const _Vertex &v1, const glm::dvec2 &v1_x, const _Vertex &v2, const gl
 /* === Check if a half-edge is locally delaunay === */
 inline bool
 _is_locally_delaunay (const _Vertex &v1, const _Vertex &v2, const _Vertex &v3, const _Vertex &v4)
-{
-	return geometry::in_circle(v4->_x, v1->_x, v2->_x, v3->_x) <= 0 ||
-	       geometry::in_circle(v3->_x, v2->_x, v1->_x, v4->_x) <= 0;
-}
+{ return geometry::in_circle(v4->_x, v1->_x, v2->_x, v3->_x) <= 0; }
 
 inline bool
 _is_locally_delaunay (const glm::dvec2 &v1_x, const glm::dvec2 &v2_x, const glm::dvec2 &v3_x, const glm::dvec2 &v4_x)
-{
-	return geometry::in_circle(v4_x, v1_x, v2_x, v3_x) <= 0 ||
-	       geometry::in_circle(v3_x, v2_x, v1_x, v4_x) <= 0;
-}
+{ return geometry::in_circle(v4_x, v1_x, v2_x, v3_x) <= 0; }
 /* === Check if a half-edge is locally delaunay === */

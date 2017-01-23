@@ -1,0 +1,99 @@
+%%%%% Margins %%%%%
+\usepackage[margin=1.5cm]{geometry}
+\geometry{a4paper,bottom=80pt}
+%%%%% Margins %%%%%
+
+\usepackage{enumitem}
+\setitemize{itemsep=-2pt,topsep=5pt}
+\setenumerate{itemsep=-2pt,topsep=5pt}
+\usepackage{pdflscape}
+\linespread{1}
+\newcommand{\raisedrule}[1][0em]{\ \leaders\hbox{\textcolor{gray}{$\cdot$\ }}}
+
+%%%%% Theorems %%%%%
+\usepackage{amsthm}
+\newtheoremstyle{newstyle}{}{}{}{}{\bfseries}{}{10pt}{\thmname{#1} \thmnumber{#2}: \thmnote{#3}}
+\theoremstyle{newstyle}
+\newtheorem{defn}{\textsc{Definition}}
+%%%%% Theorems %%%%%
+
+%%%%% Fonts %%%%%
+\usepackage[utf8]{inputenc}
+\renewcommand*\sfdefault{qhv}
+\usepackage{fourier}
+%%%%% Fonts %%%%%
+
+%%%%% Mathematics %%%%%
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{mathtools}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmr}{m}{n}
+\DeclareFontFamily{U}{tipa}{}
+\DeclareFontShape{U}{tipa}{m}{n}{<->tipa10}{}
+\newcommand{\arc@char}{{\usefont{U}{tipa}{m}{n}\symbol{62}}}%
+\newcommand{\arc}[1]{\mathpalette\arc@arc{#1}}
+\newcommand{\arc@arc}[2]{\sbox0{$\m@th#1#2$}\vbox{\hbox{\resizebox{\wd0}{\height}{\arc@char}}\nointerlineskip\box0}}
+%%%%% Mathematics %%%%%
+
+%%%%% Figures %%%%%
+%\usepackage{graphicx}
+\usepackage[font={small,sf},labelfont={normalsize,rm,bf,sc},labelsep=colon,justification=centering]{caption}
+\usepackage[font={footnotesize,sf},labelfont={small,rm,bf,sc},skip=2pt]{subcaption}
+%\usepackage{subcaption}
+%\renewcommand{\thesubfigure}{\textsc{\alph{subfigure}}}
+%\renewcommand{\figurename}{\textsc{\textbf{Figure}}}
+%%%%% Figures %%%%%
+
+%%%%% Tables %%%%%
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{array}
+\renewcommand{\tablename}{\textsc{Table}}
+\newcolumntype{x}[1]{>{\centering\hspace{0pt}}p{#1}}
+\newcolumntype{?}{!{\vrule width 3pt}}
+\setlength{\heavyrulewidth}{3pt}
+\setlength{\lightrulewidth}{1.5pt}
+%\setlength{\belowrulesep}{0pt}
+%%%%% Tables %%%%%
+
+\usepackage[dvipsnames]{xcolor}
+%\selectcolormodel{gray}
+
+%%%%% Tikz %%%%%
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepackage{gnuplot-lua-tikz}
+\usepackage{circuitikz}
+\usepackage{pgfplots}
+\usepackage{sansmath}
+\usetikzlibrary{shapes,positioning,arrows,decorations}
+%\usetikzlibrary{arrows.meta}
+%\usetikzlibrary{decorations.pathreplacing}
+\pgfdeclaredecoration{sl}{initial}{
+	\state{initial}[width=\pgfdecoratedpathlength-1sp]{\pgfmoveto{\pgfpointorigin}}
+	\state{final}{\pgflineto{\pgfpointorigin}}
+}
+\pgfplotsset{every non boxed x axis/.append style={x axis line style=-}}
+\pgfplotsset{
+	tick label style = {font=\sansmath\sffamily\footnotesize},
+	every axis label = {font=\sffamily},
+	legend style = {font=\small\sffamily},
+	label style = {font=\sffamily}
+}
+%%%%% Tikz %%%%%
+
+%%%%% Algorithms %%%%%
+\usepackage[ruled]{algorithm}
+\usepackage[noend]{algpseudocode}
+\renewcommand{\ALG@name}{\textsc{Algorithm}}
+\captionsetup[algorithm]{labelsep=colon}
+\newcommand{\algrule}[1][.2pt]{\par\vskip.15\baselineskip\hrule height #1\par\vskip.5\baselineskip}
+%%%%% Algorithms %%%%%
+
+%%%%% References %%%%%
+\bibliographystyle{abbrv}
+\usepackage{url}
+%%%%% References %%%%%
+
+\usepackage[color=lightgray]{todonotes}

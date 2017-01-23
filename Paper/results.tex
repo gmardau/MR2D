@@ -1,0 +1,42 @@
+\section{Experimentation and Results}
+
+\subsection{Experimental setup}
+
+\paragraph{Simulation of the optimisation process} In order to reproduce the successive perturbations that are applied to the shape of the model in a real design optimisation scenario, a simple shape interpolation optimisation was employed. Starting with a standard airfoil design, the method modifies its parameters --- namely the vector of shape coefficients, $A$ --- until it successfully interpolates a set of representative vertices of the target airfoil. The algorithm chosen to perform such task is the Covariance Matrix Adaptation - Evolution Strategy (CMA-ES), which is governed, among other things, by a standard deviation factor that controls the magnitude of the perturbations and whose initial value --- represented by $\sigma$ --- can be controlled. Most real scenarios use population-based methods --- like the CMA-ES --- to generate the designs, which could be availed to maintain several meshes at the same time and thereby reduce the magnitude of the perturbations between consecutive models. Even so, in this work only one mesh was employed so that the impact of such high perturbations can be more noticeable and better comprehended.
+
+\paragraph{Fixed parameters}
+\begin{itemize}
+\item \makebox[2cm]{$B = 1$ (30$\degree$)\hfill} minimum angle bound
+\item \makebox[2cm]{$H = \sqrt{2}/2$\hfill} triangle gradation bound
+\item \makebox[2cm]{$R = 1$\hfill} length scale resolution factor
+\end{itemize}
+The value chosen for $B$ is considered a threshold value, above which most Delaunay refinement algorithms tend to not finish, and those who do, start showing signs of over-refinement --- although it depends on the models used. The value of $H$ is the same as the one adopted be the creators of the length scale concept. Finally, $R$ was set so it has no impact on the refinement algorithm, entrusting the cardinality of the initial discretisation to provide the desired resolution.
+
+\paragraph{Variable parameters}
+\begin{itemize}
+\item \makebox[4.8cm]{$\sigma = \{0.01, 0.05, 0.25\}$\hfill} CMA-ES initial standard deviation factor
+\item \makebox[4.8cm]{$I = \{50, 100, 200, 300, 400, 700\}$\hfill} cardinality of the initial discretisation of the models
+\item \makebox[4.8cm]{$G = \{1, 2, 4, 6, 8, 14\}$\hfill} length scale gradation factor
+\item \makebox[4.8cm]{$D = \{0.5, 1, 2, 4\}$\hfill} mesh remodelling removal distance factor
+\end{itemize}
+The creators of the CMA-ES method recommend that $\sigma$ be set to roughly one-fourth of the search space, which, by analysing the values of $A$ of a diverse set of airfoils, was concluded to be around 0.05. Two other values --- five times smaller and larger --- were also used in order to assess the impact that the magnitude of the perturbations has on the mesh remodelling method. The values of $I$ are paired with the values of $G$ at the equivalent positions, producing only six combinations. Together, they control the precision/resolution/size of the mesh. Finally, the study of bad gradation produced by mesh remodelling is done by varying the value of $D$.
+
+\paragraph{Methodology} By employing the CMA-ES algorithm and setting the initial model to the NACA-0012 airfoil and the target model to the RAE-2822 airfoil, thirty design optimisation reproductions --- with around nine thousand iterations each --- are generated for each of the three values of $\sigma$. Surrounding the airfoil there is a circular model --- often called \textit{farfield} --- with a radius of twenty-five, between which and the airfoil is situated the mesh. The mesh generation and mesh remodelling methods are then performed considering every combination of $I$, $G$ and $D$ --- six and twenty-four, respectively.
+
+\subsection{Results analysis}
+
+\paragraph{Element preservation} Being element preservation the most relevant metric given the practical application, the obtained results are quite satisfactory, consistently achieving values above 90\% for any mesh resolution and any magnitude of model perturbations, even reaching values beyond 96\% for finer meshes. As would be expected, the higher the value of $D$, the lower the element preservation, especially when the perturbations to the models are more significant. However, it can come as a surprise that on average, element preservation tends to be better for higher values of $\sigma$ in coarser meshes.
+
+\input{figures/preservation.tex}
+
+\paragraph{Element surplus} Another metric of some significance is element surplus, defined as the percentage of elements(triangles) in excess in meshes produced by mesh remodelling relative to the mesh generation counterparts. Its significance is derived from the fact that the more elements the mesh has, the more computations the dynamic-fluid simulators have to perform. The first remark to be made is that mesh remodelling does not achieve good results for coarse meshes, reaching values up to 50\% for larger magnitudes of model perturbations. Also note that the method achieves negative values of element surplus when performing smaller perturbations to the airfoil in very small meshes, a result derived from bad gradation. For medium-to-large meshes though, mesh remodelling achieves very good results, usually below 10\%. The increase in removal distance also has a positive impact on the results, which is more noticeable on finer meshes, with a reduction of element surplus to below 5\%, despite the also decrease in element preservation by 2\%.
+
+\input{figures/surplus.tex}
+
+\paragraph{Speed-up} Perhaps the most impressive results, although the less important, are related to the time of execution. The speed-ups achieved by using mesh remodelling instead of mesh generation can vary greatly, from fifteen in larger perturbations to sixty in slighter ones. Even so, the results are as expected; the speed-up rises as mesh resolution increases and falls as either removal distance or the magnitude of the model perturbations increases.
+
+\input{figures/speed_up.tex}
+
+\input{figures/mesh_d14}
+
+\paragraph{Improvements} Despite the good results, there is still room for improvement, especially concerning the problem of element surplus and bad gradation. One possible strategy, that follows from a previous work where its development and testing was carried out, involves choosing which method to perform --- generation or remodelling --- at a given iteration. The criteria for such decision can include the variation in the shape coefficient vector, $A$, the current value of element surplus --- although difficult to control, given that there is no point of comparison and that the higher number of elements could just be a consequence of a thinner model --- or even be a periodic event. One other alternative is as follows. In this work's particular case, due to the way the CMA-ES works, it is almost certain that at some point during the nine thousand iterations --- depending on the value of $\sigma$ --- the mesh remodelling method will start performing only full adjustments (adjust  all vertices) until the very end. One can take advantage of such behaviour and upon detecting, for example, ten successive full adjustments, instruct the program to perform a single mesh generation iteration. Since the remaining iterations are bound to be full adjustments, it is guaranteed that no elements will be either added or removed from the mesh, which results in an element surplus of 0\% from that point onwards at the cost of a merely one-hundredth of a percent in element preservation in the end. Ultimately, all possible improvements are to be considered from the fluid-dynamics simulator's point of view.

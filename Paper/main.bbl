@@ -1,0 +1,137 @@
+\begin{thebibliography}{10}
+
+\bibitem{batina_tension}
+J.~T. Batina.
+\newblock {Unsteady Euler airfoil solutions using unstructured dynamic meshes}.
+\newblock {\em AIAA journal}, 28(8):1381--1388, 1990.
+
+\bibitem{ollivier_boivin_curves}
+C.~Boivin and C.~Ollivier-Gooch.
+\newblock {Guaranteed-quality triangular mesh generation for domains with
+  curved boundaries}.
+\newblock {\em International Journal for Numerical Methods in Engineering},
+  55(10):1185--1213, 2002.
+
+\bibitem{bowyer_algorithm}
+A.~Bowyer.
+\newblock {Computing dirichlet tessellations}.
+\newblock {\em The Computer Journal}, 24(2):162--166, 1981.
+
+\bibitem{chew_algorithm}
+L.~P. Chew.
+\newblock {Guaranteed-quality mesh generation for curved surfaces}.
+\newblock In {\em {Proceedings of the ninth annual symposium on Computational
+  geometry}}, pages 274--280. ACM, 1993.
+
+\bibitem{farhat_torsional}
+C.~Farhat, C.~Degand, B.~Koobus, and M.~Lesoinne.
+\newblock {Torsional springs for two-dimensional dynamic unstructured fluid
+  meshes}.
+\newblock {\em Computer methods in applied mechanics and engineering},
+  163(1):231--245, 1998.
+
+\bibitem{gill}
+P.~E. Gill, W.~Murray, M.~A. Saunders, and M.~H. Wright.
+\newblock {Maintaining LU factors of a general sparse matrix}.
+\newblock {\em Linear Algebra and its Applications}, 88:239--270, 1987.
+
+\bibitem{gondzio}
+J.~Gondzio.
+\newblock {Stable algorithm for updating dense LU factorization after row or
+  column exchange and row and column addition or deletion}.
+\newblock {\em Optimization}, 23(1):7--26, 1992.
+
+\bibitem{gosselin_ls}
+S.~Gosselin.
+\newblock {Delaunay refinement mesh generation of curve-bounded domains}.
+\newblock 2009.
+
+\bibitem{guibas_walking}
+L.~Guibas and J.~Stolfi.
+\newblock Primitives for the manipulation of general subdivisions and the
+  computation of voronoi.
+\newblock {\em ACM transactions on graphics (TOG)}, 4(2):74--123, 1985.
+
+\bibitem{hansen_cmaes}
+N.~Hansen and A.~Ostermeier.
+\newblock {Adapting arbitrary normal mutation distributions in evolution
+  strategies: The covariance matrix adaptation}.
+\newblock In {\em {Evolutionary Computation, 1996., Proceedings of IEEE
+  International Conference on}}, pages 312--317. IEEE, 1996.
+
+\bibitem{kulfan_cst}
+B.~M. Kulfan and J.~E. Bussoletti.
+\newblock {Fundamental parametric geometry representations for aircraft
+  component shapes}.
+\newblock In {\em {11th AIAA/ISSMO multidisciplinary analysis and optimization
+  conference}}, pages 1--42. sn, 2006.
+
+\bibitem{lawson_flip}
+C.~L. Lawson.
+\newblock Software for {C}\textsuperscript{1} surface interpolation.
+\newblock In J.~R. Rice, editor, {\em Mathematical Software III}, pages
+  161--194. Academic Press, New York, 1977.
+
+\bibitem{martins_thesis}
+G.~A. Martins.
+\newblock {Quality-Mesh Generation and Reconstruction for Engineering Design
+  Optimisation}, 2015.
+
+\bibitem{mclain_gift}
+D.~H. McLain.
+\newblock Two dimensional interpolation from random data.
+\newblock {\em The Computer Journal}, 19(2):178--181, 1976.
+
+\bibitem{michalak2}
+C.~Michalak and C.~Ollivier-Gooch.
+\newblock {Globalized matrix-explicit Newton-GMRES for the high-order accurate
+  solution of the Euler equations}.
+\newblock {\em Computers \& Fluids}, 39(7):1156--1167, 2010.
+
+\bibitem{michalak1}
+{Michalak, Christopher and Ollivier-Gooch, Carl}.
+\newblock {Accuracy preserving limiter for the high-order accurate solution of
+  the Euler equations}.
+\newblock {\em Journal of Computational Physics}, 228(23):8693--8711, 2009.
+
+\bibitem{nejat}
+A.~Nejat and C.~Ollivier-Gooch.
+\newblock {A high-order accurate unstructured finite volume Newton--Krylov
+  algorithm for inviscid compressible flows}.
+\newblock {\em Journal of Computational Physics}, 227(4):2582--2609, 2008.
+
+\bibitem{ollivier_boivin_ls}
+C.~Ollivier-Gooch and C.~Boivin.
+\newblock {Guaranteed-quality simplical mesh generation with cell size and
+  grading control}.
+\newblock {\em Engineering with Computers}, 17(3):269--286, 2001.
+
+\bibitem{ruppert_algorithm}
+J.~Ruppert.
+\newblock {A new and simple algorithm for quality 2-dimensional mesh
+  generation}.
+\newblock In {\em {SODA}}, volume~93, pages 83--92, 1993.
+
+\bibitem{shewchuk_lenses}
+J.~R. Shewchuk.
+\newblock {Delaunay refinement mesh generation}.
+\newblock Technical report, DTIC Document, 1997.
+
+\bibitem{shewchuk_delaunay_notes}
+J.~R. Shewchuk.
+\newblock {\em {Lecture notes on Delaunay mesh generation}}.
+\newblock Department of Electrical Engineering and Computer Science, University
+  of California at Berkeley, 1999.
+
+\bibitem{airfoils}
+{UIUC Applied Aerodynamics Group}.
+\newblock {UIUC Airfoil Coordinates Database}.
+\newblock \url{http://m-selig.ae.illinois.edu/ads/coord_database.html}.
+
+\bibitem{watson_algorithm}
+D.~F. Watson.
+\newblock {Computing the n-dimensional Delaunay tessellation with application
+  to Voronoi polytopes}.
+\newblock {\em The computer journal}, 24(2):167--172, 1981.
+
+\end{thebibliography}

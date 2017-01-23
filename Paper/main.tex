@@ -1,0 +1,29 @@
+\documentclass[10pt, twoside]{article}
+
+\usepackage{style}
+
+\title{\textbf{\huge Two-Dimensional Quality-Mesh Remodelling\\for Engineering Design Optimisation}}
+\author{Gustavo A. Martins\\\normalsize \textit{University of Coimbra, Portugal}}
+\date{December, 2016}
+
+\begin{document}
+	
+\maketitle
+
+\begin{abstract}
+Numeric simulation of physical phenomena of interest is currently a must in the development process of new products and systems, namely in the aerospace and automotive industries, among many others. However, greater simulation fidelity inevitably leads to computationally heavier simulators, strongly limiting the extent to which simulation-based numerical optimisation of physical systems may be employed in practice. In this work it is proposed a new type of re-meshing under domain boundary perturbations as a way of speeding up the simulation process in an optimisation context. The novelty of the new method, denominated mesh remodelling, is the ability to change the topology of the mesh, allowing the insertion and removal of its elements as necessary. A specialised version of mesh remodelling is presented and discussed for the specific application of airfoil shape optimisation.\\
+
+\noindent\textbf{Keywords:} Unstructured Triangular Meshes; Delaunay Triangulations; Mesh Remodelling; Airfoil Parametrisation; Design Optimisation.
+\end{abstract}
+
+\input{introduction}
+\input{generation}
+\input{remodelling}
+\input{casestudy}
+\input{results}
+\input{conclusion}
+\nocite{*}
+\bibliography{references}
+\input{appendix}
+	
+\end{document}

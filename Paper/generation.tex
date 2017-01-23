@@ -1,0 +1,26 @@
+\section{Delaunay triangulations and Mesh generation}
+
+\paragraph{Properties of a Delaunay triangulation} Given that the quality and precision of the results produced by fluid dynamic simulators are directly related to the quality of the mesh they use to perform their computations, it is advisable that the generated meshes are of high quality as well. The use of Delaunay triangulations as meshes becomes then a obvious choice. Their main advantage resides in their \textit{optimal} features, these being the maximisation of the smallest angle and the minimisation of the largest circumcircle and the min.-containment circle, leaving the so-called ``badly-shaped'' or ``skinny'' triangles out of the triangulation, and also containing the range of influence of each triangle. Another --- possibly useful --- property of Delaunay triangulations is their \textit{uniqueness}. Given a set of vertices there is only one possible Delaunay triangulation, the only exception being when four or more co-circular vertices are present and close enough for their triangles to be adjacent. Even so, the difference between meshes resides only within those permutable triangles.
+
+\paragraph{Model discretisation and curved boundaries} An important element of any mesh generation that uses models is the latter's \textit{initial discretisation}, which will dictate the shape and size of the triangles, especially if any refinement methods are to be performed. That is more so if the models in question are defined by curves, where a perfect representation of them is impossible. A good curved model discretisation must have a \textit{good resolution} --- consistent presence of vertices throughout the whole model, even in straighter sections --- and be an \textit{accurate representation} of the model --- higher presence of vertices in sections with higher curvature. Whenever refinement methods are considered, it is necessary to ensure that the initial discretisation is fine enough so that the sub-segments resulting from segment splitting do not intersect other segments of the model.
+
+\paragraph{Mesh refinement} When constructing a mesh based on models, as opposed to a pre-determined set of vertices, improving the quality of its triangles by applying refinement algorithms is common practice. The quality of a triangle is associated with its \textit{minimum angle}; the higher the angle, the higher the quality. Another way to measure the quality of a triangle is through its \textit{radius-edge} ratio, defined as its circumradius divided by its shortest edge. In a two-dimensional space the two measures are related by the formula
+\begin{equation*}
+\dfrac{r}{e_{min}} = \dfrac{1}{2 \times \sin(\theta_{min})}
+\end{equation*}
+Triangles are considered to be of \textit{poor quality} if the result of the formula above surpasses a pre-determined bound value, represented by $B$. Delaunay refinement algorithms operate by repeatedly inserting a vertex at the circumcenter of poor-quality triangles until the mesh contains none of the latter.
+
+\paragraph{Mesh gradation} For  further control over the mesh gradation, i.e.\ the rate by which triangle size increases or decreases, one can use the concept of \textit{length scale}, which is an attribute of vertices and represents the approximate distance from each vertex to the nearest boundary --- shortest path through the edges. For vertices given as discretisation, the value of length scale is given by
+\begin{equation*}
+LS_b(v) = \dfrac{\textit{lfs}(v)}{R} = \min_{\text{neighbours }u_i} \left(\dfrac{\|u_i-v\|}{R} \right)
+\end{equation*}
+where \textit{lfs} is the \textit{local feature size}, defined as the radius of the smallest disk centred at $v$ that touches two disjoint parts of the domain boundary --- which, since $v$ is a constituent of the boundary, can be simplified as being the distance to the nearest neighbour vertex --- and $R$, denominated \textit{resolution factor}, is a pre-defined value that controls the resolution of input features. For vertices inserted during the refinement process, denominated Steiner vertices, the value of length scale is computed as
+\begin{equation*}
+LS_s(v) = \min_{\text{neighbours }u_i} \left(LS(u_i) + \dfrac{\|u_i-v\|}{G} \right)
+\end{equation*}
+where $G$, \textit{gradation factor}, is also a pre-set value that controls the rate of triangle size increase as they get further from the boundaries. If a Steiner vertex also happens to be a boundary vertex --- in the case of segment splitting ---, the computation of its length scale takes into account an additional arc-length-based interpolation between its two boundary neighbours:
+\begin{equation*}
+%LS_{bs}(v) = \min \left(LS(w_1) + \left(LS(w_2)-LS(w_1)\right)\times\dfrac{\arc{w_1 v}}{\arc{w_1 w_2}}, LS_s(v)\right)
+LS_{bs}(v) = \min \left(LS(w_1) \xrightharpoondown[\arc{w_1 w_2}]{\arc{w_1 v}} LS(w_2),\ LS_s(v)\right)
+\end{equation*}
+A triangle is considered to be of poor quality, or \textit{poor gradation}, if its circumradius divided by the average length scale of its vertices is higher than a pre-determined bound value, represented by $H$.

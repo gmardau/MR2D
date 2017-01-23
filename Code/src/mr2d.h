@@ -281,6 +281,20 @@ namespace mr2d
 		public:
 		template <bool T = UseMetrics, typename = std::enable_if_t<T>>
 		inline double
+		get_last_triangles ()
+		{ return _metrics->get_last_triangles(); }
+
+
+		public:
+		template <bool T = UseMetrics, typename = std::enable_if_t<T>>
+		inline double
+		get_avg_triangles ()
+		{ return _metrics->get_avg_triangles(); }
+
+
+		public:
+		template <bool T = UseMetrics, typename = std::enable_if_t<T>>
+		inline double
 		get_last_preservation ()
 		{ return _metrics->get_last_preservation(); }
 

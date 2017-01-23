@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <sstream>
 #include "mr2d"
 #include "models.h"
 
-#define NA 8
+#define EXECUTE(v_, t_, m_, d_) execute(argv, i, a, v_, t_, m_, d_, mr2d::MR2D<v_, t_, m_, d_>(nf, nm, L, R, G, B, H, D))
 
 /* Forward function declarations */
 template <typename T> void execute (char const *[], unsigned int, unsigned int, bool, bool, bool, bool, T);
@@ -25,22 +26,14 @@ main (int argc, char const *argv[])
 
 	process_command(argc, argv, i, a, v, t, m, d, nf, nm, L, R, G, B, H, D);
 
-	if(v) { if(t) { if(m) { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,1,1,1>(nf, nm, L, R, G, B, H, D));
-	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,1,1,0>(nf, nm, L, R, G, B, H, D)); }
-	                else  { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,1,0,1>(nf, nm, L, R, G, B, H, D));
-	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,1,0,0>(nf, nm, L, R, G, B, H, D)); } }
-	        else  { if(m) { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,0,1,1>(nf, nm, L, R, G, B, H, D));
-	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,0,1,0>(nf, nm, L, R, G, B, H, D)); }
-	                else  { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,0,0,1>(nf, nm, L, R, G, B, H, D));
-	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<1,0,0,0>(nf, nm, L, R, G, B, H, D)); } } }
-	else  { if(t) { if(m) { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,1,1,1>(nf, nm, L, R, G, B, H, D));
-	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,1,1,0>(nf, nm, L, R, G, B, H, D)); }
-	                else  { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,1,0,1>(nf, nm, L, R, G, B, H, D));
-	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,1,0,0>(nf, nm, L, R, G, B, H, D)); } }
-	        else  { if(m) { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,0,1,1>(nf, nm, L, R, G, B, H, D));
-	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,0,1,0>(nf, nm, L, R, G, B, H, D)); }
-	                else  { if(d) execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,0,0,1>(nf, nm, L, R, G, B, H, D));
-	                        else  execute(argv, i, a, v, t, m, d, mr2d::MR2D<0,0,0,0>(nf, nm, L, R, G, B, H, D)); } } }
+	if(!v) { if(!t) { if(!m) { if(!d) EXECUTE(0,0,0,0); else EXECUTE(0,0,0,1); }
+	                  else   { if(!d) EXECUTE(0,0,1,0); else EXECUTE(0,0,1,1); } }
+	         else   { if(!m) { if(!d) EXECUTE(0,1,0,0); else EXECUTE(0,1,0,1); }
+	                  else   { if(!d) EXECUTE(0,1,1,0); else EXECUTE(0,1,1,1); } } }
+	else   { if(!t) { if(!m) { if(!d) EXECUTE(1,0,0,0); else EXECUTE(1,0,0,1); }
+	                  else   { if(!d) EXECUTE(1,0,1,0); else EXECUTE(1,0,1,1); } }
+	         else   { if(!m) { if(!d) EXECUTE(1,1,0,0); else EXECUTE(1,1,0,1); }
+	                  else   { if(!d) EXECUTE(1,1,1,0); else EXECUTE(1,1,1,1); } } }
 
 	return 0;
 }
@@ -56,7 +49,7 @@ execute (char const *argv[], unsigned int i, unsigned int a, bool v, bool t, boo
 	FILE *file =  i ? fopen(argv[i], "r") : fopen("input/rae2822/0.05/1", "r");
 	char status[3][100] = {{"\0"}, {"\0"}, {"\0"}};
 	unsigned int j, k, l, n, time_left;
-	double A[2][NA], avg_time;
+	double A[2][8], avg_time;
 
 	/* Iterations */
 	fscanf(file, "%u", &n);
@@ -67,8 +60,8 @@ execute (char const *argv[], unsigned int i, unsigned int a, bool v, bool t, boo
 		printf("\r%*c\r%s%s%s", 200, ' ', status[0], status[1], status[2]); fflush(stdout);
 
 		/* Create model */
-		for(k = 0; k < 2; ++k) for(l = 0; l < NA; ++l) fscanf(file, "%lf", &A[k][l]);
-		model_cst_naca<NA> model = model_cst_naca<NA>(A);
+		for(k = 0; k < 2; ++k) for(l = 0; l < 8; ++l) fscanf(file, "%lf", &A[k][l]);
+		model_cst_naca<8> model = model_cst_naca<8>(A);
 
 		/* Call method */
 		if(!j) example.generation(farfield, model);
@@ -85,18 +78,19 @@ execute (char const *argv[], unsigned int i, unsigned int a, bool v, bool t, boo
 		/* Prepare status */
 		if(t) {
 			avg_time = example.template get_avg_time<true>(); time_left = (n-1-j) * avg_time + 0.5;
-			sprintf(status[1], "  \u2219  [Avg. time: %.2lf ms] [Estimated time left: %dm %ds]",
+			sprintf(status[1], "  \u2219  [Avg. time: %.3lf ms] [Estimated time left: %dm %ds]",
 			    avg_time*1000, time_left/60, time_left%60); }
 		if(m)
 			sprintf(status[2], "  \u2219  [Avg. preservation: %.2lf%%]", example.template get_avg_preservation<true>());
 		/* Write diff to output file */
-		if(d) example.template export_diff<true>("diff");
+		if(d) example.template export_diff<true>((std::string("output/diff/") + std::to_string(j+1)).c_str());
 	}
 	fclose(file);
 
-	/* Write times and metrics to output file */
-	if(t) example.template export_timers <true>("times");
-	if(m) example.template export_metrics<true>("metrics");
+	/* Write times, metrics and mesh to output file */
+	if(t) example.template export_timers <true>("output/timers");
+	if(m) example.template export_metrics<true>("output/metrics");
+	example.export_mesh("output/mesh");
 	/* Print status */
 	printf("\r%*c\r%s%s%s\n", 200, ' ', status[0], status[1], status[2]);
 	/* Display mesh */

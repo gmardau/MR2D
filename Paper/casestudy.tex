@@ -1,0 +1,59 @@
+\section{Case study}
+
+\paragraph{Airfoils and design optimisation} This work is carried out in the context of engineering design optimisation, being airfoils the design in question and the resulting meshes to be used by a fluid dynamics simulator. An airfoil is a cross-section of an airplane wing from a lateral standpoint. In the section that follows, the parametrisation used to create the airfoil models, the specialised version of the mesh remodelling method, and the practical application in which the method is to be used are described.
+
+\subsection{Model parametrisation}
+
+\paragraph{Class Shape Transformation} The airfoil designs used in this study were created using a parametrisation called Class Shape Transformation. It was chosen due to being specifically designed to model the many components of an aircraft, such as fuselages, nacelles, winglets, airfoils, among others. Additionally, it is possible to achieve a great variety of shapes within a particular class of model by changing a single component of the parametrisation, simplifying the process of design optimisation. Also, the fact that one can predict the changes in shape from the parameters variation makes for a very intuitive and easy to work with parametrisation.
+\begin{equation*}
+\begin{gathered}
+a(t) = \begin{cases}
+\eta_u(1-2t) & \text{, } 0 \leq t < \frac{1}{2}\\
+\eta_l(2t-1) & \text{, } \frac{1}{2} \leq t < 1
+\end{cases}\\[1pc]
+\left.
+\begin{aligned}
+\eta_u(\psi) &= C_u(\psi) \times S_u(\psi) + T_u(\psi)\\[0.75pc]
+C_u(\psi) &= \psi ^{e_1} \times (1 - \psi) ^ {e_2}\\
+S_u(\psi) &= \sum_{i=0}^{n} A_{ui} \times B_{i,n}(\psi)\\
+T_u(\psi) &= \psi \times \Delta\eta_u
+\end{aligned}
+\quad\quad\right|\quad\quad
+\begin{aligned}
+\eta_l(\psi) &= C_l(\psi) \times S_l(\psi) + T_l(\psi)\\[0.75pc]
+C_l(\psi) &= \psi ^{e_1} \times (1 - \psi) ^ {e_2}\\
+S_l(\psi) &= \sum_{i=0}^{n} A_{li} \times B_{i,n}(\psi)\\
+T_l(\psi) &= \psi \times \Delta\eta_l
+\end{aligned}\\[1pc]
+\psi = \dfrac{x}{c}
+\quad\quad\quad\quad
+\eta = \dfrac{y}{c}
+\end{gathered}
+\end{equation*}
+
+\paragraph{Formulation} The shape of the model is given by the \textit{airfoil function}\footnote{Not a part of the original scheme.}, $a(t)$, which purpose is to merge the functions of the upper and lower surfaces of the airfoil into one, describing a counter-clockwise path that starts and ends at the trailing edge of the airfoil. In this formulation, $y$ is a function of $x$, which in turn is a function of $t$. The upper surface functions and parameters contain the subscript $u$, while the lower surface functions and parameters contain the subscript $l$. The \textit{Class function}, $C(\psi)$, defines the class of the model, giving it an initial shape. The coefficients $e_1$ and $e_2$ control the shape of the model at its leading and trailing edges, respectively, assuming the values 0.5 and 1 in the ``NACA airfoil'' class --- the one used in this work. The \textit{Shape function}, $S(\psi)$, adjusts the basic shape of the model with the help of $A$, a vector of \textit{shape coefficients} --- object of study in design optimisation. $B_{i,n}(\psi)$ represents the $i^\text{th}$ Bernstein basis polynomial of degree $n$. Finally, the \textit{Trailing edge function}\footnote{Not presented as a separate function in the original scheme.}, $T(\psi)$, is used to translate the trailing edge of the airfoil along the $y$ axis, being $\Delta\eta$ the translation amount. The variable $c$ denotes the length of the airfoil chord, i.e.\ the horizontal distance between the leading and trailing edges of the airfoil.
+
+\subsection{Mesh remodelling specialisation}
+
+\paragraph{Model characteristics and premises} Given the specific characteristics of the CST parametrisation as well as some design choices, it is possible to optimise the more general mesh remodelling method into a faster and still as robust version, although more complex, so that it takes full advantage of the models in use. Some of these characteristics and choices are as follows:
+\begin{itemize}
+\item The model is defined by two functions, guaranteeing that for a given value of $x$ there is a unique value of $y$;
+\item The chord length, $c$, is set to 1, therefore limiting the $x$-domain of all models to the interval $[0,1]$;
+\item The trailing edge translation value, $\Delta\eta$, is set to 0 on both surfaces, ensuring the continuous presence of a vertex at the coordinates $(1,0)$;
+\item The number of vertices in the initial discretisation is maintained throughout the optimisation process, allowing a one-to-one correlation between vertices of different models. Also, due to $y$ being a function of $x$ and $x$ a function of $t$, these vertices differ only in their $y$-value.
+\end{itemize}
+
+\paragraph{Adjustment} The first step of the specialised version of mesh remodelling aims to speed-up the method by adjusting the coordinates of some, if not all of the boundary vertices, thus reducing the number of circular region removals and vertex replacements to be performed in a latter stage. This is only possible due to the singular properties of the models addressed in this work, especially the first and fourth previously listed, which guarantee that no boundary edges of the same surface are going to intersect regardless of the magnitude of the adjustments. This process is applied to all boundary vertices, whether Steiner or non-Steiner. Let $v$ be the vertex being currently checked and $v_n$ its new position; let $U$ be $v$'s neighbours and $U_n$ their new positions. Vertex $v$ can only be adjusted if all the following prove true:
+\begin{itemize}
+\item $v_n$ is not be beyond the current opposite surface;
+\item Considering $v_n$ and $U$: $v$'s surrounding triangles are valid;
+\item Considering $v_n$ and $U_n$: $v$'s surrounding triangles are valid, Delaunay, and respect the mesh's quality and gradation constraints.
+\end{itemize}
+The first verification prevents the two surfaces from intersecting when one surface gets adjusted and the other does not. The second verification guarantees that, whichever combination of vertices is adjusted, the resulting mesh is still valid. The third and last verification covers the properties that any triangle in a fully refined Delaunay triangulation must possess, which is the reason why, in the case that every boundary vertex gets adjusted, not only the next step of mesh remodelling but also the subsequent refinement procedure can be skipped. If $v$ passes all checks, then its coordinates are updated to $v_n$. If that is not the case and $v$ happens to be non-Steiner, then the Steiner vertices between $v$ and its two non-Steiner boundary neighbours are not even considered for adjustment. This is done to prevent the accumulation of vertices in regions that need to be rebuilt, which could lead to over-refinement.
+
+\paragraph{Removal and replacement} The second and final stage of the specialised mesh remodelling version is very similar to the original method, the only difference being the number of circular removal regions employed; one for each pair of old/new vertices, given the one-to-one correlation, instead of one for each new and old vertex. The centre of such removal regions is located at the outermost vertex --- highest $y$-value for vertices belonging to the upper surface; the opposite for the lower surface. Regarding the radius of these regions, although it is recommended that it be determined in the same way as the original, one can use the vertical distance between the pair of vertices instead and still achieve good results. If the vertex was already adjusted, the use of a removal region for that particular pair of vertices can be avoided altogether.
+\input{figures/circles.tex}
+
+\subsection{Practical application}
+
+\todo[inline]{Describe how mesh remodelling is to be applied to the dynamics simulator, how the latter works (implicit vs explicit), in what ways remodelling can speed-up the process (element preservation), etc.. The time to perform simulation is 5 orders of magnitude above, so speed-up in remodelling is not that relevant.}

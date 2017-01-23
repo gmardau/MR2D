@@ -1,0 +1,32 @@
+\begin{table}[!hp]
+\begin{center}
+\begin{tabular}{c|cc?c|c?c?c|c|c||c|c}
+\multirow{2}{*}{\textbf{\large $\boldsymbol{\sigma}$}} & \multirow{2}{*}{\textbf{\large $\boldsymbol{I}$}} & \multirow{2}{*}{\textbf{\large $\boldsymbol{G}$}} & \multicolumn{2}{c?}{\textbf{\large Generation}} & \multirow{2}{*}{\textbf{\large $\boldsymbol{D}$}} & \multicolumn{5}{c}{\textbf{{\large Remodelling} }} \\\cline{4-5}\cline{7-11}
+ & & & \textbf{\# Tri.} & \textbf{Time} & &\textbf{\# Tri.} & \textbf{Time} & \textbf{Preserv.} & \textbf{+ Tri.} & \textbf{Sp.-up} \\\toprule
+\multirow{24}[13]{*}{.01} & \multirow{4}{*}{50} & \multirow{4}{*}{1} & \multirow{4}{*}{1067} & \multirow{4}{*}{1.66 ms} & .5 & 1036 & 0.05 ms & 89.95 \% & -2.88 \% & 33.13 \\\cline{6-11}
+ & & & &  & 1 & 1036 & 0.05 ms & 89.95 \% & -2.88 \% & 33.11 \\\cline{6-11}
+ & & & &  & 2 & 1036 & 0.05 ms & 89.95 \% & -2.88 \% & 33.13 \\\cline{6-11}
+ & & & &  & 4 & 1036 & 0.05 ms & 89.95 \% & -2.88 \% & 33.06 \\\cmidrule[1.5pt]{2-11}
+ & \multirow{4}{*}{100} & \multirow{4}{*}{2} & \multirow{4}{*}{1866} & \multirow{4}{*}{3.47 ms} & .5 & 1926 & 0.12 ms & 88.54 \% & 3.21 \% & 30.09 \\\cline{6-11}
+ & & & &  & 1 & 1926 & 0.12 ms & 88.54 \% & 3.21 \% & 30.08 \\\cline{6-11}
+ & & & &  & 2 & 1927 & 0.12 ms & 88.54 \% & 3.24 \% & 30.09 \\\cline{6-11}
+ & & & &  & 4 & 1917 & 0.11 ms & 88.55 \% & 2.74 \% & 30.66 \\\cmidrule[1.5pt]{2-11}
+ & \multirow{4}{*}{200} & \multirow{4}{*}{4} & \multirow{4}{*}{4634} & \multirow{4}{*}{9.63 ms} & .5 & 4681 & 0.24 ms & 90.89 \% & 1.02 \% & 39.37 \\\cline{6-11}
+ & & & &  & 1 & 4681 & 0.25 ms & 90.88 \% & 1.01 \% & 39.30 \\\cline{6-11}
+ & & & &  & 2 & 4687 & 0.24 ms & 90.91 \% & 1.14 \% & 39.59 \\\cline{6-11}
+ & & & &  & 4 & 4693 & 0.24 ms & 90.98 \% & 1.28 \% & 40.29 \\\cmidrule[1.5pt]{2-11}
+ & \multirow{4}{*}{300} & \multirow{4}{*}{6} & \multirow{4}{*}{9759} & \multirow{4}{*}{20.67 ms} & .5 & 9931 & 0.43 ms & 93.40 \% & 1.77 \% & 48.33 \\\cline{6-11}
+ & & & &  & 1 & 9937 & 0.42 ms & 93.40 \% & 1.83 \% & 49.07 \\\cline{6-11}
+ & & & &  & 2 & 9985 & 0.43 ms & 93.43 \% & 2.32 \% & 48.43 \\\cline{6-11}
+ & & & &  & 4 & 9996 & 0.42 ms & 93.47 \% & 2.43 \% & 48.89 \\\cmidrule[1.5pt]{2-11}
+ & \multirow{4}{*}{400} & \multirow{4}{*}{8} & \multirow{4}{*}{17289} & \multirow{4}{*}{36.19 ms} & .5 & 17403 & 0.67 ms & 94.86 \% & 0.66 \% & 53.79 \\\cline{6-11}
+ & & & &  & 1 & 17410 & 0.68 ms & 94.86 \% & 0.70 \% & 53.44 \\\cline{6-11}
+ & & & &  & 2 & 17499 & 0.69 ms & 94.87 \% & 1.21 \% & 52.15 \\\cline{6-11}
+ & & & &  & 4 & 17516 & 0.70 ms & 94.89 \% & 1.31 \% & 51.80 \\\cmidrule[1.5pt]{2-11}
+ & \multirow{4}{*}{700} & \multirow{4}{*}{14} & \multirow{4}{*}{53560} & \multirow{4}{*}{154.08 ms} & .5 & 53726 & 1.86 ms & 96.88 \% & 0.31 \% & 82.78 \\\cline{6-11}
+ & & & &  & 1 & 53782 & 1.87 ms & 96.90 \% & 0.41 \% & 82.53 \\\cline{6-11}
+ & & & &  & 2 & 54023 & 1.92 ms & 96.88 \% & 0.86 \% & 80.33 \\\cline{6-11}
+ & & & &  & 4 & 54124 & 2.05 ms & 96.86 \% & 1.05 \% & 75.13\\\bottomrule
+\end{tabular}\end{center}
+\caption{Full results of mesh remodelling for $\sigma=0.01$ - Gottingen 459 airfoil}\centering\sffamily\footnotesize
+Average of thirty optimisation scenarios\end{table}

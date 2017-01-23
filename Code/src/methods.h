@@ -210,7 +210,7 @@ class Methods
 		_last_ls_computed_vertex = _mesh._vertices.rbegin()->_id + 1;
 		_assess_and_adjust();
 		/* If all vertices were adjusted - end of remodelling (refinement not needed (false)) */
-		if(_aux_vertices[1].empty()) return false;
+		if(_aux_vertices[1].empty()) { _aux_vertices[0].resize(0); return false; }
 		_fill_interior();
 		if(!_aux_vertices[2].empty()) _compute_distances();
 		_remove_and_replace();

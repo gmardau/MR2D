@@ -1,0 +1,154 @@
+\begin{figure}[!h]
+\begin{center}
+\begin{tikzpicture}
+\begin{scope}[shift={(0.0\linewidth,0)}]
+\begin{axis}[
+ width=0.34\linewidth,height=0.23\linewidth,
+ title=\normalsize\mbox{$\sigma=0.01$},
+ xmode=log,enlarge x limits=0.025,
+ ylabel=Speed-up,
+ axis y line*=left,
+ ymin=12.298001935,ymax=46.8477530579,
+ tick align=outside,
+ x axis line style = ultra thick,y axis line style={white},
+ xtick={2000,10000,50000},xticklabels={2000,10000,50000},
+ minor xtick={18000,26000,34000,42000,58000,66000}, every y tick/.style={white},ymajorgrids,grid style={gray!30,thick}]
+\addplot[very thick,mark=none,smooth,color=red!70] table[] {
+	1269.16833333 31.6855345912
+	2276.448 26.8707707962
+	5182.04633333 29.2477146264
+	10781.034 31.7074162558
+	18828.409 32.9383318154
+	57983.79 45.202526814
+};
+\addplot[very thick,mark=none,smooth,color=orange!70] table[] {
+	1263.86633333 31.6060225847
+	2291.61833333 26.8776081425
+	5160.89366667 29.4407881576
+	10724.269 31.0678354418
+	18700.9823333 32.2773651178
+	57488.1266667 42.3926903045
+};
+\addplot[very thick,mark=none,smooth,color=green!60!black!70] table[] {
+	1268.27666667 31.9670050761
+	2317.154 26.8161970043
+	5158.744 28.1727603369
+	10661.7936667 29.8974309816
+	18531.0873333 29.7190647863
+	56804.2343333 37.3539723219
+};
+\addplot[very thick,mark=none,smooth,color=blue!60!] table[] {
+	1271.49233333 32.9496402878
+	2295.37766667 27.407628438
+	5046.867 27.1089519248
+	10420.654 27.4152858964
+	18138.199 27.0006743413
+	55823.631 31.1383365433
+};
+!\end{axis}
+\end{scope}
+\begin{scope}[shift={(0.28\linewidth,0)}]
+\begin{axis}[
+ width=0.34\linewidth,height=0.23\linewidth,
+ title=\normalsize\mbox{$\sigma=0.05$},
+ xmode=log,enlarge x limits=0.025,
+ xlabel=Number of elements \footnotesize(logarithmic scale),x label style={at={(axis description cs:0.5,-0.05)},anchor=north},
+ yticklabels={},
+ legend style={at={(0.55,1.45)},legend style={text width=4em},legend style={draw=none},anchor=north,legend columns=-1},
+ axis y line*=left,
+ ymin=12.298001935,ymax=46.8477530579,
+ tick align=outside,
+ x axis line style = ultra thick,y axis line style={white},
+ xtick={2000,10000,50000},xticklabels={2000,10000,50000},
+ minor xtick={18000,26000,34000,42000,58000,66000}, every y tick/.style={white},ymajorgrids,grid style={gray!30,thick}]
+\addlegendimage{line width=3pt,mark=none,red!70}
+\addlegendentry{$D=0.5$}
+\addlegendimage{line width=3pt,mark=none,orange!70}
+\addlegendentry{$D=1$}
+\addlegendimage{line width=3pt,mark=none,green!60!black!70}
+\addlegendentry{$D=2$}
+\addlegendimage{line width=3pt,mark=none,blue!60!}
+\addlegendentry{$D=4$}
+\addplot[very thick,mark=none,smooth,color=red!70] table[] {
+	1385.864 29.8071005917
+	2376.925 25.4262493935
+	5278.774 27.4042288557
+	10966.038 29.2777323652
+	19097.6056667 31.2138004604
+	58814.4653333 42.2111672218
+};
+\addplot[very thick,mark=none,smooth,color=orange!70] table[] {
+	1383.557 29.5969447709
+	2384.27766667 26.0002480774
+	5254.04566667 27.2115713471
+	10884.6076667 28.746943015
+	18943.0066667 29.7920261508
+	58423.8133333 38.4640840704
+};
+\addplot[very thick,mark=none,smooth,color=green!60!black!70] table[] {
+	1396.929 30.3823884198
+	2419.80333333 25.3892926357
+	5228.412 25.9846684206
+	10716.7823333 27.1159652639
+	18603.7346667 27.459017608
+	56994.5426667 33.8062258428
+};
+\addplot[very thick,mark=none,smooth,color=blue!60!] table[] {
+	1381.061 31.075879087
+	2397.538 25.3708545146
+	5081.389 24.2571985095
+	10439.4216667 24.367256283
+	18174.898 23.8584241696
+	55852.1183333 27.0495972092
+};
+!\end{axis}
+\end{scope}
+\begin{scope}[shift={(0.56\linewidth,0)}]
+\begin{axis}[
+ width=0.34\linewidth,height=0.23\linewidth,
+ title=\normalsize\mbox{$\sigma=0.25$},
+ xmode=log,enlarge x limits=0.025,
+ axis y line*=right,
+ ymin=12.298001935,ymax=46.8477530579,
+ tick align=outside,
+ x axis line style = ultra thick,y axis line style={white},
+ xtick={2000,10000,50000},xticklabels={2000,10000,50000},
+ minor xtick={18000,26000,34000,42000,58000,66000}, every y tick/.style={white},ymajorgrids,grid style={gray!30,thick}]
+\addplot[very thick,mark=none,smooth,color=red!70] table[] {
+	1567.82 24.3597087379
+	2702.218 20.7384125721
+	6014.308 20.6685714286
+	12277.662 21.5144055236
+	21270.3676667 23.5989934336
+	64968.27 28.321400669
+};
+\addplot[very thick,mark=none,smooth,color=orange!70] table[] {
+	1588.167 24.6710914454
+	2687.20233333 20.6931321953
+	5771.60766667 19.7048959955
+	11710.9023333 20.1133153092
+	20285.6003333 21.433680576
+	62456.379 24.4699482658
+};
+\addplot[very thick,mark=none,smooth,color=green!60!black!70] table[] {
+	1607.47966667 24.3478893741
+	2683.991 19.6924820552
+	5506.855 17.8394183961
+	11072.7156667 17.8210863576
+	19096.4883333 17.5816127838
+	58285.7603333 20.4091672825
+};
+\addplot[very thick,mark=none,smooth,color=blue!60!] table[] {
+	1693.51233333 22.8510928962
+	2676.17366667 17.372437927
+	5274.201 15.234055355
+	10604.068 14.470046195
+	18295.141 13.8648840721
+	56172.5003333 14.7614343841
+};
+!\end{axis}
+\end{scope}
+\end{tikzpicture}
+\end{center}
+\caption{Speed-up results by mesh remodelling - Clark-Y airfoil}\centering\sffamily\footnotesize
+Average of thirty optimisation scenarios\end{figure}
