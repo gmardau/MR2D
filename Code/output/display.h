@@ -186,8 +186,8 @@ class Display
 
 		// Maybe reallocate and not redo, instead of not reallocate and redo (if usage is above 50% perhaps)
 		unsigned int new_vertices = _mesh._vertices.rbegin()->_id - _last_vertex_id + 1;
-		if(_vertices.capacity() < _vertices.size() + (new_vertices << 1)) {
-			if(_vertices.capacity() < _mesh._vertices.size() << 1) {
+		if(1 || _vertices.capacity() < _vertices.size() + (new_vertices << 1)) {
+			if(1 || _vertices.capacity() < _mesh._vertices.size() << 1) {
 				_vertices.reserve(_mesh._vertices.size() << 2);
 				alloc_vertices = true; return true;
 			} else { alloc_vertices = false; return true; }

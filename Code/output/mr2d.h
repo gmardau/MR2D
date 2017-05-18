@@ -22,6 +22,12 @@
 #include <unordered_map>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <GL/glew.h>
+#include <GL/glu.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <X11/Xlib.h>
 
 
 namespace mr2d
@@ -35,9 +41,10 @@ namespace mr2d
 	#include "structures.h"
 	#include "data.h"
 	#include "mesh.h"
+	#include "display.h"
 	#include "methods.h"
 
-	template <bool UseTimers = true, bool UseMetrics = true, bool UseDiff = true>
+	template <bool UseDisplay = true, bool UseTimers = true, bool UseMetrics = true, bool UseDiff = true>
 	class MR2D
 	{
 		private:
@@ -48,6 +55,7 @@ namespace mr2d
 		private:
 		_MeshType _mesh;
 		Methods<_MeshType> _methods = Methods<_MeshType>(_mesh);
+		Display<_MeshType> *_display;
 		Timers *_timers;
 		Metrics *_metrics;
 		Diff *_diff;
@@ -64,6 +72,7 @@ namespace mr2d
 		      double L = M_PI/6, double R = 1, double G = 6, double B = M_PI/6, double H = sqrt(2)/2, double D = 1)
 		    : _size_farfield(size_farfield), _size_model(size_model), _L(L), _R(R), _G(G), _B(B), _H(H), _D(D)
 		{
+			if(UseDisplay) { _display = new Display<_MeshType>(_mesh); _methods._display = _display; }
 			if(UseTimers) _timers = new Timers();
 			if(UseMetrics) { _metrics = new Metrics(); _mesh._metrics = _metrics; }
 			if(UseDiff) { _diff = new Diff(); _mesh._diff = _diff; }
@@ -227,6 +236,17 @@ namespace mr2d
 		{ _diff->export_diff(path, mode, _mesh); }
 		/* ############################ Export ############################ */
 		/* ################################################################ */
+
+
+		/* ################################################################# */
+		/* ############################ Display ############################ */
+		public:
+		template <bool T = UseDisplay, typename = std::enable_if_t<T>>
+		inline void
+		display (bool dynamic = false)
+		{ _display->display(dynamic, _iteration); }
+		/* ############################ Display ############################ */
+		/* ################################################################# */
 
 
 		/* ################################################################ */

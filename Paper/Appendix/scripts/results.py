@@ -53,7 +53,7 @@ for i,w in list(enumerate(_w.keys())):
 			f.write(" & & & \\textbf{\\# Tri.} & \\textbf{Time} & &")
 			f.write("\\textbf{\\# Tri.} & \\textbf{Time} & ")
 			f.write("\\textbf{Preserv.} & \\textbf{+ Tri.} & \\textbf{Sp.-up} \\\\\\toprule\n")
-			f.write("\\multirow{24}[13]{*}{"+_s[s][1]+"}")
+			f.write("\\multirow{24}[11]{*}{"+_s[s][1]+"}")
 			for k,r in enumerate(_r.keys()):
 				f.write(" & \\multirow{4}{*}{"+_r[r][1][0]+"} & \\multirow{4}{*}{"+_r[r][1][1]+"}")
 				f.write(" & \\multirow{4}{*}{"+str(int(round(_tr[i][j][k][0][0],0)))+"}")
